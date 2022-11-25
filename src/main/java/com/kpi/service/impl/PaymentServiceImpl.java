@@ -1,7 +1,10 @@
 package com.kpi.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +24,13 @@ public class PaymentServiceImpl implements PaymentService{
 	private PaymentSummaryMapper paymentSummaryMapper;
 
 	@Override
-	public List<PaymentSummaryDTO> getAllPayments() {
-		List<PaymentSummary> paymentSummaryList = paymentSummaryRepo.findAll();
+	public List<PaymentSummaryDTO> getAllPayments(Optional<String> paymentDate) {
+		List<PaymentSummary> paymentSummaryList = new ArrayList<PaymentSummary>();
+		if(paymentDate.isPresent()) {
+			paymentSummaryList = paymentSummaryRepo.getPaymentSummaryBySelectedPaymentDate(paymentDate.get());
+		}else {
+			paymentSummaryList = paymentSummaryRepo.findAll();
+		}
 		List<PaymentSummaryDTO> paymentSummaryDTOList = null;
 		if(paymentSummaryList != null && !paymentSummaryList.isEmpty()) {
 			paymentSummaryDTOList = paymentSummaryMapper.mapPaymentSummaryModelToDto(paymentSummaryList);

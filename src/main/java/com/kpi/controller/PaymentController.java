@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kpi.dto.PaymentSummaryDTO;
 import com.kpi.exception.RequestInvalidException;
@@ -23,8 +24,8 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @GetMapping("/payments")
-    public ResponseEntity<List<PaymentSummaryDTO>> getAllPayments() {
-    	Optional<List<PaymentSummaryDTO>> paymentSummaryDtoList = Optional.ofNullable(paymentService.getAllPayments());
+    public ResponseEntity<List<PaymentSummaryDTO>> getAllPayments(@RequestParam("paymentDate") Optional<String> paymentDate) {
+    	Optional<List<PaymentSummaryDTO>> paymentSummaryDtoList = Optional.ofNullable(paymentService.getAllPayments(paymentDate));
     	if(paymentSummaryDtoList.isPresent()) {
     		return ResponseEntity.ok(paymentSummaryDtoList.get());
     	}else {
